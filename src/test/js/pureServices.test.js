@@ -83,7 +83,6 @@ test('set stores a value under the normalised key so v can read it back', () => 
 // A key with two or more spaces should have ALL spaces replaced, but String.replace(" ", "_")
 // only replaces the first occurrence, so the second space survives and the lookup misses.
 test('v normalises every space in a multi-word key',
-    {todo: 'i18nService.v/set use String.replace(" ", "_") which replaces only the first space'},
     () => {
         const s = i18n({a_b_c: 'value'});
         assert.equal(s.v('a b c'), 'value');

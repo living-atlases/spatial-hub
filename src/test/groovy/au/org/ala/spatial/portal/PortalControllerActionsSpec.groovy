@@ -3,7 +3,6 @@ package au.org.ala.spatial.portal
 import au.org.ala.ws.service.WebService
 import grails.testing.web.controllers.ControllerUnitTest
 import org.apache.http.entity.ContentType
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -64,7 +63,6 @@ class PortalControllerActionsSpec extends Specification implements ControllerUni
      * When the browser-cache id is missing the action issues a redirect to add it, but it does not
      * return, so it goes on to write the javascript body to the already-redirected response.
      */
-    @PendingFeature(reason = 'messages() does not return after redirecting to add the cache id, so it also writes a body')
     def "messages only redirects (no body) when the cache id is missing"() {
         given:
         controller.messageService = [messagesAge: 42L, messages: '{"a":"b"}']
@@ -139,7 +137,6 @@ class PortalControllerActionsSpec extends Specification implements ControllerUni
      * r.resp is now null, so the error payload is discarded and rendering null throws (ambiguous
      * render overload). The same pattern is in speciesList and speciesListInfo.
      */
-    @PendingFeature(reason = 'speciesListItems overwrites r with [error:...] then renders the now-null r.resp on a non-2xx response')
     def "speciesListItems renders the error body for a non-2xx response"() {
         given:
         params.id = '42'
@@ -281,7 +278,6 @@ class PortalControllerActionsSpec extends Specification implements ControllerUni
      * property rather than a method call, so when webService returns null the null branch throws
      * MissingPropertyException instead of rendering {}. Same code at lines 300, 356, 861, 878.
      */
-    @PendingFeature(reason = 'postTask null branch uses unparenthesised `render [:] as JSON`, parsed as a subscript, so it throws instead of rendering {}')
     def "postTask renders an empty object when the service returns null"() {
         given:
         request.method = 'POST'

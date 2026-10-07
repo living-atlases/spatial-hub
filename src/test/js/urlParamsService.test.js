@@ -157,7 +157,6 @@ test('mapMultiQuerySpeciesLayers ignores the .q and .s sub-parameters as layer r
 // The doc/examples use `ly1`, `ly1.q`, `ly1.s`, but the regex is new RegExp("ly\\.[0-9]{1,}"),
 // which requires a dot (`ly.1`). So documented `lyN` parameters never create a layer.
 test('mapMultiQuerySpeciesLayers builds a layer for a documented "lyN" parameter',
-    {todo: 'the lyN regex requires a dot ("ly.1"); documented "ly1" parameters match nothing'},
     () => {
         const {calls, biocache} = captureBiocache();
         const s = service({BiocacheService: biocache, MapService: {add: () => {}}});

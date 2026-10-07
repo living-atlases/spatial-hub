@@ -306,7 +306,7 @@
                     },
                     mapMultiQuerySpeciesLayers: function (params, bs, ws, geospatialKosher) {
                         var promises = [];
-                        var speciesLayerPattern = new RegExp("ly\\.[0-9]{1,}");
+                        var speciesLayerPattern = new RegExp("ly\\.?[0-9]{1,}");
                         for (var key in params) {
                             if (params.hasOwnProperty(key)) {
                                 var match = speciesLayerPattern.test(key);
