@@ -52,6 +52,7 @@
     "x2js": "^3.2.1"
   },
   "scripts": {
-    "jsdoc": "node_modules/jsdoc/jsdoc.js --configure node_modules/angular-jsdoc/common/conf.json --template node_modules/angular-jsdoc/angular-template/ --destination build/resources/main/public/docs --readme README.md --recurse grails-app/assets/javascripts/spApp"
+    "jsdoc": "node_modules/jsdoc/jsdoc.js --configure node_modules/angular-jsdoc/common/conf.json --template node_modules/angular-jsdoc/angular-template/ --destination build/resources/main/public/docs --readme README.md --recurse grails-app/assets/javascripts/spApp",
+    "test:js": "node --test src/test/js/*.test.js"
   }
 }
