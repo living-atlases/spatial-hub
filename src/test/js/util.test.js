@@ -200,3 +200,79 @@ test('deepCopy copies nested values and skips private keys and functions', () =>
     copy.b.c[2].d = 4;
     assert.equal(src.b.c[2].d, 3);
 });
+
+// --- more pure helpers --------------------------------------------------------------------------
+
+test('isOutOfRange is true when any longitude is below -180 or above +180', () => {
+    assert.equal(Util.isOutOfRange(inCtx([[100, 0], [-100, 0]])), false);
+    assert.equal(Util.isOutOfRange(inCtx([[181, 0]])), true);
+    assert.equal(Util.isOutOfRange(inCtx([[-181, 0]])), true);
+    assert.equal(Util.isOutOfRange(inCtx([[180, 0], [-180, 0]])), false); // exactly on the edge is in range
+    assert.equal(Util.isOutOfRange(inCtx([])), false);
+});
+
+test('buildWkt writes the points in reverse order as "lng lat" pairs', () => {
+    assert.equal(Util.buildWkt(inCtx([[1, 2], [3, 4], [5, 6]])), '5 6, 3 4, 1 2');
+    assert.equal(Util.buildWkt(inCtx([[1, 2]])), '1 2');
+});
+
+test('geBorderColourForDataPoint distinguishes selected points', () => {
+    assert.equal(Util.geBorderColourForDataPoint(inCtx({selected: true})), 'rgba(0, 0, 0, 1)');
+    assert.equal(Util.geBorderColourForDataPoint(inCtx({selected: false})), 'rgba(0, 0, 0, 0.1)');
+    assert.equal(Util.geBorderColourForDataPoint(inCtx({})), 'rgba(0, 0, 0, 0.1)');
+});
+
+test('convertFacetDataToChartJSFormat splits facet rows into labels and data', () => {
+    const data = inCtx([{displayname: 'Birds', count: 10}, {displayname: 'Mammals', count: 5}]);
+    const out = Util.convertFacetDataToChartJSFormat(data);
+    assert.deepEqual(plain(out), {labels: ['Birds', 'Mammals'], data: [10, 5]});
+});
+
+test('convertFacetDataToChartJSFormat appends to a provided accumulator', () => {
+    const copyTo = inCtx({labels: ['Existing'], data: [1]});
+    const data = inCtx([{displayname: 'Birds', count: 10}]);
+    const out = Util.convertFacetDataToChartJSFormat(data, copyTo);
+    assert.deepEqual(plain(out), {labels: ['Existing', 'Birds'], data: [1, 10]});
+});
+
+test('convertFacetDataToChartJSFormat returns the empty accumulator when data is undefined', () => {
+    const out = Util.convertFacetDataToChartJSFormat(undefined);
+    assert.deepEqual(plain(out), {labels: [], data: []});
+});
+
+test('getBarColour prefixes the supplied colour with # for both fill fields', () => {
+    const chartData = inCtx([{v: 1}, {v: 2}]);
+    const getColour = vm.runInContext('(function(p){ return "ABCDEF"; })', context);
+    const out = Util.getBarColour(chartData, undefined, getColour);
+    assert.deepEqual(plain(out), [
+        {backgroundColor: '#ABCDEF', pointBackgroundColor: '#ABCDEF'},
+        {backgroundColor: '#ABCDEF', pointBackgroundColor: '#ABCDEF'}
+    ]);
+});
+
+test('getBarColour empties the accumulator before filling it', () => {
+    const chartData = inCtx([{v: 1}]);
+    const copyTo = inCtx([{stale: true}, {stale: true}]);
+    const getColour = vm.runInContext('(function(p){ return "000000"; })', context);
+    const out = Util.getBarColour(chartData, copyTo, getColour);
+    assert.equal(out.length, 1);
+    assert.deepEqual(plain(out[0]), {backgroundColor: '#000000', pointBackgroundColor: '#000000'});
+});
+
+test('getBarColour returns an empty accumulator when chartData is falsy', () => {
+    const getColour = vm.runInContext('(function(p){ return "000000"; })', context);
+    assert.deepEqual(plain(Util.getBarColour(undefined, undefined, getColour)), []);
+});
+
+test('getBorderColour maps selection state to the border colours', () => {
+    const chartData = inCtx([{selected: true}, {selected: false}]);
+    const out = Util.getBorderColour(chartData);
+    assert.deepEqual(plain(out), ['rgba(0, 0, 0, 1)', 'rgba(0, 0, 0, 0.1)']);
+});
+
+test('isFacetOfRangeDataType consults $SH.rangeDataTypes', () => {
+    const {Util: u} = loadUtil({rangeDataTypes: ['int', 'tfloat', 'tdate']});
+    assert.equal(u.isFacetOfRangeDataType('int'), true);
+    assert.equal(u.isFacetOfRangeDataType('tfloat'), true);
+    assert.equal(u.isFacetOfRangeDataType('string'), false);
+});
