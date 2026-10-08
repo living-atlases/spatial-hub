@@ -29,7 +29,7 @@
 <g:set var="headerVisiblity" value="${(grailsApplication.config.skin.header && grailsApplication.config.spApp.header) ? '' : 'hidden'}"/>
 
 <div id="wrapper-navbar" itemscope="" itemtype="http://schema.org/WebSite" class="${headerVisiblity}">
-    <a class="skip-link sr-only sr-only-focusable" href="#INSERT_CONTENT_ID_HERE">Skip to content</a>
+    <a class="skip-link sr-only sr-only-focusable" href="#INSERT_CONTENT_ID_HERE"><g:message code="Skip to content" default="Skip to content"/></a>
 
     <nav class="navbar navbar-inverse navbar-expand-md">
         <div class="container-fluid header-logo-menu">
@@ -49,16 +49,16 @@
                         <a href="#" class="save-load"
                            onclick="$('#saveSessionButton')[0].click()"
                            data-toggle="dropdown" role="button"
-                           aria-expanded="false">Save</a>
+                           aria-expanded="false"><g:message code="Save" default="Save"/></a>
                         <a href="#" class="save-load"
                            onclick="$('#sessionsButton')[0].click()"
                            data-toggle="dropdown" role="button"
-                           aria-expanded="false">Load</a>
+                           aria-expanded="false"><g:message code="Load" default="Load"/></a>
                         <g:if test="grailsApplication.config.workflow.enabled">
                             <a href="#" class="save-load"
                                onclick="$('#workflowsButton')[0].click()"
                                data-toggle="dropdown" role="button"
-                               aria-expanded="false">Workflows</a>
+                               aria-expanded="false"><g:message code="Workflows" default="Workflows"/></a>
                         </g:if>
                     </g:if>
                     <button class="display-flex search-trigger hidden-md hidden-lg collapsed collapse-trigger-button"
