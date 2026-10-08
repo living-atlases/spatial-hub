@@ -79,22 +79,20 @@
 
                             <div ng-show="inputData.importArea || inputData.importArea == undefined" class="area-types">
                                 <label><span i18n="17">Import</span></label>
-                                <div class="checkbox"><label><input i18n="18" type="radio" ng-model="area"
+                                <div class="checkbox"><label><input type="radio" ng-model="area"
                                                                     value="importShapefile" name="addArea_area"
                                                                     ng-change="selectArea('importShapefile')"
-                                                                    ng-disabled="isNotLoggedIn || selectionDone">Import
-                                    Shapefile</label></div>
+                                                                    ng-disabled="isNotLoggedIn || selectionDone"><span i18n="18">Import Shapefile</span></label></div>
                                 <div class="well-lg" ng-show="fileName.length > 0 && area == 'importShapefile'"
                                      style="">
                                     <div class="alert alert-ala-success alert-success"><p><span
                                             i18n="19">Imported shapefile:&nbsp;</span>{{
                                         fileName }}</p></div>
                                 </div>
-                                <div class="checkbox"><label><input i18n="20" type="radio" ng-model="area"
+                                <div class="checkbox"><label><input type="radio" ng-model="area"
                                                                     value="importKML" name="addArea_area"
                                                                     ng-change="selectArea('importKML')"
-                                                                    ng-disabled="isNotLoggedIn || selectionDone">Import
-                                    KML</label></div>
+                                                                    ng-disabled="isNotLoggedIn || selectionDone"><span i18n="20">Import KML</span></label></div>
                                 <div class="well-lg" ng-show="fileName.length > 0 && area == 'importKML'">
                                     <div class="alert alert-ala-success alert-success"><p><span
                                             i18n="21">"Imported KML file:&nbsp;</span>{{

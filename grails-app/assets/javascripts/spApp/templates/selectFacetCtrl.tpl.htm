@@ -36,7 +36,7 @@
         <span style="float:right" i18n="51">Download</span><i class=" pull-right glyphicon glyphicon-download-alt"></i>
     </a>
     <div>
-        <input type="checkbox" ng-model="sortFacetsByName" ng-click="applyFilter()">Sorted by name
+        <input type="checkbox" ng-model="sortFacetsByName" ng-click="applyFilter()">{{ 'Sorted by name' | i18n }}
     </div>
     <table id="facetList" ng-hide="updatingPage" class="table layers-table table-striped"
            style="margin-top:10px;width:100%;height:250px;overflow:auto;display:block">
@@ -64,7 +64,7 @@
             <span i18n="111" aria-hidden="true">»</span>
         </button>
     </div>
-    <span>Page {{(offset / pageSize) + 1}} of {{activeFacet.maxPages}}</span>
+    <span>{{ 'Page' | i18n }} {{(offset / pageSize) + 1}} {{ 'of' | i18n }} {{activeFacet.maxPages}}</span>
 
     <div style="float:right">
         <span style="color:red" span ng-if="activeFacet.selection.length ==0 || activeFacet.selection.length >1" >{{activeFacet.selection.length}} classes selected</span>
