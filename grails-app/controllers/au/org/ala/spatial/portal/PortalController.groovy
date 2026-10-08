@@ -159,6 +159,7 @@ class PortalController {
         // when missing, redirect and apply parameter 'id' for browser caching purposes
         if (!params.id) {
             redirect(action: 'messages', params: [id: messageService.messagesAge])
+            return
         }
 
         response.contentType = 'text/javascript'
@@ -297,7 +298,7 @@ class PortalController {
             def r = webService.postMultipart(url, null, null, files, ContentType.APPLICATION_JSON, false, true)
 
             if (!r) {
-                render [:] as JSON
+                render([:] as JSON)
             } else if (r.error || r.statusCode > 299) {
                 log.error("failed ${type} upload: ${r}")
                 def msg = r.resp
@@ -353,7 +354,7 @@ class PortalController {
             def r = webService.post(url, json, null, ContentType.APPLICATION_JSON, false, true)
 
             if (r == null) {
-                render [:] as JSON
+                render([:] as JSON)
             } else {
                 response.status = r.statusCode
                 render r.resp as JSON
@@ -431,7 +432,7 @@ class PortalController {
 
             def status = r.statusCode
             if (r.statusCode < 200 || r.statusCode > 300) {
-                r = [error: r.resp]
+                r = [resp: [error: r.resp]]
             }
 
             render status: status, r.resp as JSON
@@ -457,7 +458,7 @@ class PortalController {
 
             def status = r.statusCode
             if (r.statusCode < 200 || r.statusCode > 300) {
-                r = [error: r.resp  ]
+                r = [resp: [error: r.resp]]
             }
 
             render status: status, r.resp as JSON
@@ -490,7 +491,7 @@ class PortalController {
 
             def status = r.statusCode
             if (r.statusCode < 200 || r.statusCode > 300) {
-                r = [error: r.resp  ]
+                r = [resp: [error: r.resp]]
             }
 
             render status: status, r.resp as JSON
@@ -509,7 +510,7 @@ class PortalController {
 
         def status = r.statusCode
         if (r.statusCode < 200 || r.statusCode > 300) {
-            r = [error: r.resp  ]
+            r = [resp: [error: r.resp]]
         }
 
         render status: status, r.resp as JSON
@@ -858,7 +859,7 @@ class PortalController {
             def r = webService.postMultipart(url, null, null, [tempFile], ContentType.APPLICATION_JSON, false, true)
 
             if (!r) {
-                render [:] as JSON
+                render([:] as JSON)
             } else {
                 render r.resp as JSON, status: String.valueOf(r.statusCode)
             }
@@ -875,7 +876,7 @@ class PortalController {
             def r = webService.delete(url, null, ContentType.APPLICATION_JSON, false, true)
 
             if (!r) {
-                render [:] as JSON
+                render([:] as JSON)
             } else {
                 response.status = r.statusCode
                 if (r.statusCode >= 400) {

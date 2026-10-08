@@ -69,6 +69,9 @@ dependencies {
 
     testImplementation "org.mockito:mockito-core"
     testImplementation "org.grails:grails-web-testing-support"
+    // types used in the APIs of WebService / AuthService that the ALA plugins only put on the runtime classpath
+    testCompileOnly "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
+    testCompileOnly "au.org.ala:userdetails-service-client:$alaSecurityLibsVersion"
     testImplementation "org.grails.plugins:geb"
     testRuntimeOnly 'net.sourceforge.htmlunit:htmlunit:2.35.0'
     testImplementation "org.seleniumhq.selenium:htmlunit-driver:2.35.1"
@@ -183,6 +186,15 @@ tasks.getByName("integrationTest") {
     //or pass with -Dusername, -Dpassword
     systemProperty "username", System.properties['username']
     systemProperty "password", System.properties['password']
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// The browser drivers are only needed by the Geb functional tests, not by the unit tests
+tasks.matching { it.name ==~ /configure\w+DriverBinary/ }.configureEach {
+    onlyIf { gradle.taskGraph.hasTask(':integrationTest') }
 }
 
 
