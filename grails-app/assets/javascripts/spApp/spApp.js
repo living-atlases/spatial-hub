@@ -47,6 +47,17 @@ var spApp = angular.module('spApp', ['leaflet-directive', 'ngAnimate', 'ui.boots
 spApp.value('sandboxConfig', SANDBOX_CONFIG);
 spApp.value('existing', 1);
 
+/**
+ * Translates a text that is its own message key: {{ 'Add area to map' | i18n }}. Texts without a message are shown as they are.
+ * Used for text that does not have a numbered key, e.g. menu names, tool descriptions and step names coming from
+ * menu-config.json, view-config.json and the spatial-service process specifications.
+ */
+spApp.filter('i18n', function () {
+    return function (text) {
+        return typeof text === 'string' && typeof $i18n === 'function' ? $i18n(text) : text;
+    };
+});
+
 spApp.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({
         templateUrl: '/spApp/spApp.htm',

@@ -119,12 +119,11 @@
                         </div>
                         <a style="padding-left:20px;" download="layerList.csv" ng-href="{{exportUrl}}"
                            ng-disabled="{{exportUrl == null}}">
-                            <i class="glyphicon glyphicon-download-alt"></i>Export
+                            <i class="glyphicon glyphicon-download-alt"></i>{{ 'Export' | i18n }}
                         </a>
                         <label style="padding-left:20px;"
-                               class="{{validLayerSelection ? '' : 'red-text' }}" testTag="countSelectedLayers">{{_selection.layers.length}} of
-                            {{layers.length}} layers
-                            selected</label>
+                               class="{{validLayerSelection ? '' : 'red-text' }}" testTag="countSelectedLayers">{{_selection.layers.length}} {{ 'of' | i18n }}
+                            {{layers.length}} {{ 'layers selected' | i18n }}</label>
                     </div>
                 </div>
 

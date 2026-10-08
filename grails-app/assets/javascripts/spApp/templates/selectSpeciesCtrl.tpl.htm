@@ -17,7 +17,7 @@
     </label>
     <i class="glyphicon glyphicon-question-sign text-warning" popover-trigger="mouseenter" uib-popover="Include records that have NOT been supplied with coordinates (note they will not appear on map but will be included in download file)" popover-placement="right"></i>
 </div>
-<p ng-show="!mappedLayerSelected"  class="notice" ><i class="glyphicon glyphicon-info-sign text-warning"></i>Minimum one spatially related option is required! See this <a href="https://support.ala.org.au/support/solutions/articles/6000249565-spatially-valid-flag" target="_blank" >support article</a> for more information</p>
+<p ng-show="!mappedLayerSelected"  class="notice" ><i class="glyphicon glyphicon-info-sign text-warning"></i>{{ 'Minimum one spatially related option is required! See this' | i18n }} <a href="https://support.ala.org.au/support/solutions/articles/6000249565-spatially-valid-flag" target="_blank" >{{ 'support article' | i18n }}</a> {{ 'for more information' | i18n }}</p>
 
 <div ng-show="_absentOption && !mappedLayerSelected" class="checkbox">
     <label>
@@ -137,9 +137,8 @@
 
 <div ng-show="listsEnabled() && _importList" class="radio" name="createSpeciesList">
     <label>
-    <input i18n="248" type="radio" ng-model="speciesOption" value="importList"
-           ng-change="changeOption('importList')" ng-disabled="isNotLoggedIn" name="{{_uniqueId}}">Create new species
-    list</label>
+    <input type="radio" ng-model="speciesOption" value="importList"
+           ng-change="changeOption('importList')" ng-disabled="isNotLoggedIn" name="{{_uniqueId}}"><span i18n="248">Create new species list</span></label>
 
     <div ng-show="speciesOption == 'importList'" style="margin-left:15px">
         <div ng-show="speciesListName" style="margin-left:5px">

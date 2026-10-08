@@ -17,10 +17,10 @@
                             <div>
                                 <div class="checkbox"><label><input type="radio" ng-model="method"
                                                                     value="upload" name="addPoints_method"
-                                                                    ng-change="method='upload'">Upload CSV</label></div>
+                                                                    ng-change="method='upload'">{{ 'Upload CSV' | i18n }}</label></div>
                                 <div class="checkbox" ng-show="enablePriorUploads"><label><input type="radio" ng-model="method"
                                                                     value="existing" name="addPoints_method"
-                                                                    ng-change="method='existing'; file=null">Previous upload</label></div>
+                                                                    ng-change="method='existing'; file=null">{{ 'Previous upload' | i18n }}</label></div>
                             </div>
                             <br/>
                         </div>
