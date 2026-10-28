@@ -1,5 +1,6 @@
 package au.org.ala.spatial.portal
 
+import au.org.ala.ws.service.WebService
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -10,6 +11,8 @@ class PortalControllerSpec extends Specification implements ControllerUnitTest<P
     Expando authService = new Expando(userId: null, userInRole: { role -> false }, loginUrl: { req -> '/login' })
     SessionService sessionService = Mock(SessionService)
     PortalService portalService = Mock(PortalService)
+    MessageService messageService = Mock(MessageService)
+    WebService webService = Mock()
 
     @Override
     Set<String> getIncludePlugins() {
@@ -183,5 +186,50 @@ class PortalControllerSpec extends Specification implements ControllerUnitTest<P
         1 * portalService.getAppConfig(null) >> [user_roles: ['ROLE_USER']]
         response.status == 401
         0 * portalService.getConfig(*_)
+    }
+
+    void "messages redirects for browser caching and renders nothing else"() {
+        given:
+        loggedIn('u1')
+        controller.messageService = messageService
+
+        when:
+        controller.messages()
+
+        then:
+        1 * messageService.getMessagesAge() >> 7
+        0 * messageService.getMessages()
+        response.redirectedUrl == '/portal/messages/7'
+        response.text == ''
+    }
+
+    void "postTask answers an empty JSON object when the service answers nothing"() {
+        given:
+        loggedIn('u1')
+        controller.webService = webService
+        request.method = 'POST'
+        request.json = '{"name": "AooEoo"}'
+
+        when:
+        controller.postTask()
+
+        then:
+        1 * webService.post(*_) >> null
+        response.text == '{}'
+    }
+
+    void "speciesListItems keeps the error of the lists service in the body"() {
+        given:
+        loggedIn('u1')
+        controller.webService = webService
+        params.id = 'dr1'
+
+        when:
+        controller.speciesListItems()
+
+        then:
+        1 * webService.get(*_) >> [statusCode: 404, resp: 'no such list']
+        response.status == 404
+        response.json.error == 'no such list'
     }
 }
