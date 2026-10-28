@@ -42,7 +42,7 @@
         samplingUrl: '${config.sampling.url}',
         listsVersion: ${config.lists.version},
         listsUrl: '${config.lists.url}',
-        listsUrlUi: '${(config.lists.urlUi ?: config.lists.url) + (config.lists.version == 2 ? "/list/" : "/speciesListItem/list/")}',
+        listsUrlUi: '${(config.lists.urlUi ?: config.lists.url) + (config.lists.version?.toString() == "2" ? "/list/" : "/speciesListItem/list/")}',
         listsFacets: ${config.lists.facets},
         listTypes: ${(config.lists.listTypes as grails.converters.JSON).toString().encodeAsRaw()},
         listLicences: ${((config.lists.listLicences ?: []) as grails.converters.JSON).toString().encodeAsRaw()},

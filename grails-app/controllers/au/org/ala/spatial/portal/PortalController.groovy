@@ -248,6 +248,13 @@ class PortalController {
         render r as JSON
     }
 
+    // The ala-install template quotes lists.version, so it can be a String: "1" == 1 is false in
+    // Groovy and a v1 hub would call the v2 API.
+    private int listsVersion() {
+        def version = grailsApplication.config.lists.version
+        version ? version.toString().trim() as int : 1
+    }
+
     def postAreaWkt() {
         def userId = getValidUserId(params)
 
@@ -374,7 +381,7 @@ class PortalController {
             def url = grailsApplication.config.lists.url
 
             def r
-            if (grailsApplication.config.lists.version == 1) {
+            if (listsVersion() == 1) {
                 r = webService.post("${url}/ws/speciesList/", json)
             } else {
                 // create tmp file
@@ -478,7 +485,7 @@ class PortalController {
             int page = (offset ? offset.intdiv(max) : 0) + 1
 
             def r
-            if (grailsApplication.config.lists.version == 1) {
+            if (listsVersion() == 1) {
                 r = webService.get("${url}/ws/speciesList", [user: userId, offset: offset, max: max, q: params.q ?: '', sort: params.sort ?: '', order: params.order ?: 'asc'], org.apache.http.entity.ContentType.APPLICATION_JSON, false, true, [:])
             } else {
                 r = webService.get("${url}/v2/speciesList", [page: page, pageSize: max, q: params.q ?: '', sort: params.sort ?: '', order: params.order ?: 'asc'], org.apache.http.entity.ContentType.APPLICATION_JSON, false, true, [:])

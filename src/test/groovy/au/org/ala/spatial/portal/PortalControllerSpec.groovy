@@ -25,6 +25,8 @@ class PortalControllerSpec extends Specification implements ControllerUnitTest<P
             config.security.oidc.enabled = true
             config.layersService.url = 'https://spatial.example.org/ws'
             config.cache.headers.control = 'max-age=3600'
+            config.lists.url = 'https://lists.test'
+            config.lists.version = 1
         }
     }
 
@@ -231,5 +233,47 @@ class PortalControllerSpec extends Specification implements ControllerUnitTest<P
         1 * webService.get(*_) >> [statusCode: 404, resp: 'no such list']
         response.status == 404
         response.json.error == 'no such list'
+    }
+
+    // ala-install writes `version: "1"` and the gbif.es docker config writes no version at all, so a deployed hub
+    // read it as a String or as null. Comparing that with an Integer sent a v1 hub to the v2 API and the species
+    // list picker came back empty.
+    @Unroll
+    void "speciesList asks the v#expected API when the configured version is #version"() {
+        given:
+        loggedIn('u1')
+        controller.webService = webService
+        config.lists.version = version
+
+        when:
+        controller.speciesList()
+
+        then:
+        1 * webService.get({ it == "https://lists.test${path}" }, *_) >> [statusCode: 200, resp: [:]]
+
+        where:
+        version | path                | expected
+        1       | '/ws/speciesList'   | 1
+        '1'     | '/ws/speciesList'   | 1
+        ' 1 '   | '/ws/speciesList'   | 1
+        null    | '/ws/speciesList'   | 1
+        2       | '/v2/speciesList'   | 2
+        '2'     | '/v2/speciesList'   | 2
+    }
+
+    void "postSpeciesList posts to the v1 API when the version is a String"() {
+        given:
+        loggedIn('u1')
+        controller.webService = webService
+        config.lists.version = '1'
+        request.method = 'POST'
+        request.json = '{"listName": "frogs", "listItems": "a,b"}'
+
+        when:
+        controller.postSpeciesList()
+
+        then:
+        1 * webService.post('https://lists.test/ws/speciesList/', _) >> [statusCode: 200, resp: [druid: 'dr1']]
+        0 * webService.postMultipart(*_)
     }
 }
